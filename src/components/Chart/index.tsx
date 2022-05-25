@@ -6,6 +6,7 @@
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import React from 'react';
 
+
 const Chart = () => {
   const { data: appData } = useTypedSelector((state: any) => state.app);
   //   const [data, setData] = useState([]);
