@@ -6,11 +6,13 @@ import MainInfoAddresses from './components/MainInfoAddresses';
 import { Content } from 'components/Content';
 import Loader from 'components/Loader';
 import useSortData from 'hooks/useSortData';
+import React from 'react';
 import { getAccountsData } from 'services/accounts.service';
 
 export const Addresses = () => {
-  const { ref, sortTerm, setSortTerm, renderData, loading } =
-    useSortData(getAccountsData);
+  const { ref, sortTerm, setSortTerm, renderData, loading, setRenderData } =
+    useSortData(getAccountsData, 'balance');
+  const isQueryContracts = sortTerm === 'contracts';
 
   return (
     <Content>
@@ -23,31 +25,55 @@ export const Addresses = () => {
           <div className="addresses_table">
             <AddressesHeader />
             {renderData && renderData.data && renderData.data.length
-              ? renderData.data.map((account: Account, index: number) => {
-                  return account && renderData.data.length - 1 === index ? (
-                    <AddressesBody
-                      key={account._id}
-                      lastCardRef={ref}
-                      isContract={account.isContract}
-                      address={account.address}
-                      balance={account.balance}
-                      rank={index + 1}
-                      txCount={account.totalTx}
-                    />
-                  ) : (
-                    <AddressesBody
-                      key={account._id}
-                      isContract={account.isContract}
-                      address={account.address}
-                      balance={account.balance}
-                      rank={index + 1}
-                      txCount={account.totalTx}
-                    />
-                  );
-                })
+              ? !isQueryContracts
+                ? renderData.data.map((account: Account, index: number) => {
+                    return (
+                      <AddressesBody
+                        key={account._id}
+                        lastCardRef={
+                          account && renderData.data.length - 1 === index
+                            ? ref
+                            : null
+                        }
+                        isContract={account.isContract}
+                        address={account.address}
+                        balance={account.balance}
+                        rank={index + 1}
+                        txCount={account.totalTx}
+                      />
+                    );
+                  })
+                : renderData.data
+                    .filter((acc: any) => acc.isContract === true)
+                    .map((account: Account, index: number) => {
+                      return (
+                        <AddressesBody
+                          key={account._id}
+                          lastCardRef={
+                            account &&
+                            renderData.data.filter(
+                              (acc: any) => acc.isContract === true,
+                            ).length -
+                              1 ===
+                              index
+                              ? ref
+                              : null
+                          }
+                          isContract={account.isContract}
+                          address={account.address}
+                          balance={account.balance}
+                          rank={index + 1}
+                          txCount={account.totalTx}
+                        />
+                      );
+                    })
               : null}
           </div>
-          {loading && <Loader />}
+          {loading && (
+            <div style={{ top: '-20px', position: 'relative' }}>
+              <Loader />
+            </div>
+          )}
         </div>
       </Content.Body>
     </Content>

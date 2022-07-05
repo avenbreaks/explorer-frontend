@@ -1,0 +1,78 @@
+.universall {
+  &_link_underline {
+    text-decoration: underline;
+  }
+
+  &_dark {
+    color: $main;
+  }
+
+  &_light1 {
+    color: #58667e;
+  }
+
+  &_light2 {
+    color: #808a9d;
+  }
+
+  &_bold {
+    font-weight: 700;
+  }
+
+  &_indent {
+    &_icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+    }
+  }
+
+  &_hover {
+    cursor: pointer !important;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.loader {
+  position: relative;
+  top: 40px;
+  z-index: 3;
+}
+
+.style {
+  display: grid;
+}
+
+.address {
+  &_content {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    line-height: 40px;
+    @include for_phone {
+      font-size: 14px;
+    }
+    @include for_small_phone {
+      font-size: 12px;
+    }
+  }
+
+  &_button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f6f6f6;
+    border-radius: 8px;
+    color: #fff;
+
+    &_copyed {
+      position: absolute;
+      margin: 70px 0 0 10px;
+    }
+  }
+}

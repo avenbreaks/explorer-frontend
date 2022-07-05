@@ -1,3 +1,4 @@
+import { Currency } from '../../../../components/UI/Currency';
 import Amb from 'assets/icons/Cryptos/Amb';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { AddressesBodyProps } from 'pages/Addresses/addresses.interface';
@@ -22,10 +23,8 @@ const AddressesBody: FC<AddressesBodyProps> = ({
   return (
     appData &&
     address && (
-      <>
-        <div className="addresses_body_cell" ref={lastCardRef}>
-          {rank}
-        </div>
+      <div className="addresses_body_cells" ref={lastCardRef}>
+        <div className="addresses_body_cell">{rank}</div>
 
         <NavLink
           to={`/addresses/${address}/`}
@@ -49,16 +48,16 @@ const AddressesBody: FC<AddressesBodyProps> = ({
           {address}
         </NavLink>
         <div className="addresses_body_cell">{txCount || 0}</div>
-        <div className="addresses_body_cell balance">
+        <div className="addresses_body_cell">
           <Amb />
-          &nbsp;&nbsp;
-          {displayAmount(ambBalance)} AMB
+          <span className="addresses_body_cell_icon">AMB</span>
+          <Currency value={displayAmount(ambBalance) || 0} symbol=" " />
         </div>
 
         <div className="addresses_body_cell">
           {(holdingPercentage || 0).toFixed(2)} %
         </div>
-      </>
+      </div>
     )
   );
 };

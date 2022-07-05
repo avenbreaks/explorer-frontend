@@ -1,38 +1,27 @@
-@import './address_details/address_details';
-@import './address_details/components/address_blocks';
-@import './address_details/components/address_blocks_header';
+// addresses
+@import './addresses/index';
 
-@import './addresses/addresses';
-@import './addresses/components/addresses_body';
-@import './addresses/components/addresses_header';
-@import './addresses/components/addresses_sort';
-@import './addresses/components/main_info_addresses';
+// apollo
+@import './apollo/index';
 
-@import './apollo/apollo';
-@import './apollo/components/apollo_blocks_body';
-@import './apollo/components/apollo_blocks_header';
-@import './apollo/components/apollo_blocks_sort';
-@import './apollo/components/main_info_apollo.scss';
+// atlas
+@import './atlas/index';
 
-@import './atlas/atlas';
-@import './atlas/components/atlas_blocks_body';
-@import './atlas/components/atlas_blocks_header';
-@import './atlas/components/atlas_blocks_sort';
-@import './atlas/components/main_info_atlas.scss';
+// blocks
 
-@import './blocks/blocks';
+@import './blocks/index.scss';
 
-@import './bundles/bundles';
+// bundles
+@import './bundles/index';
 
 @import './community/community';
 
 @import './hermes/hermes';
 
-@import './home/home';
-@import './home/components/lastest_transactions';
-@import './home/components/latest_blocks';
-@import './home/components/latests_heading';
-@import './home/components/main_info';
+// home
+@import './home/index.scss';
 
-@import './transactions/transactions';
+// transactions
+@import './transactions/index';
+
 @import './error_page';

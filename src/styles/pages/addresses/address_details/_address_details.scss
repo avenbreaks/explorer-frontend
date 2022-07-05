@@ -1,0 +1,194 @@
+.address_details {
+  &_h1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px auto;
+    white-space: nowrap;
+
+    &:not(&-tx) {
+      @include for_laptop {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    &-tx {
+      justify-content: space-between;
+    }
+
+    &_status {
+      color: #1acd8c;
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 5px;
+      display: block;
+    }
+  }
+
+  &_copy {
+    span {
+      font-family: 'Proxima Nova';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      color: #05060f;
+    }
+    display: flex;
+    align-items: center;
+    margin: 12px;
+    font-size: 2.3rem;
+    line-height: 2.2rem;
+    font-style: normal;
+    font-weight: 400;
+    @include for_laptop {
+      margin-left: 0px;
+      font-size: 2rem;
+    }
+    @include for_tablet {
+      font-size: 1.4rem;
+    }
+    @include for_phone {
+      font-size: 1rem;
+    }
+    @include for_small_phone {
+      font-size: 0.8rem;
+    }
+    .address_details_copyed {
+      position: absolute;
+      margin: 70px 0 0 10px;
+    }
+
+    &_btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background: #f6f6f6;
+      border-radius: 8px;
+      color: #fff;
+      padding-left: 10px;
+
+      &_copyed {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        margin: 65px 0 0 10px;
+      }
+    }
+    &_copyed {
+      position: absolute;
+      margin: 70px 0 0 10px;
+    }
+
+    &_popup {
+      position: absolute;
+      margin-top: 70px;
+    }
+  }
+
+  &_info {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-row-gap: 3vw;
+    margin-bottom: 32px;
+    @include for_tablet {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: 16px;
+    }
+
+    &_text {
+      display: flex;
+      gap: 4px;
+      @include for_phone {
+        flex-direction: column;
+      }
+
+      &_span {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 1.28em;
+        line-height: 2.28em;
+      }
+    }
+  }
+}
+
+#centered-tooltip {
+  background-color: #808a9d !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 6px;
+
+  &:before {
+    border-top-color: #808a9d !important;
+  }
+}
+
+.flex_between {
+  flex-direction: row;
+}
+
+.flex_row {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 155px;
+}
+
+// need show/hide when click button show/hide
+// need Text Fade Out / Read More Link
+
+.wrapper-bytes {
+  background-color: $white;
+  margin: 32px 0;
+  height: auto;
+  border: 1px solid $secondary;
+  border-radius: 16px;
+  padding: 20px 20px;
+  word-wrap: break-word;
+  min-height: 120px;
+  position: relative;
+  overflow: hidden;
+
+  p {
+    min-height: 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gradient-text {
+    background: linear-gradient(0deg, transparent, rgba(0, 0, 0, 1));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.wrapper-bytes .read-more-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 10px 0;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 1)
+  );
+}

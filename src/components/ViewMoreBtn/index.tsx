@@ -5,7 +5,7 @@ const ViewMoreBtn: React.FC<ViewMoreBtnProps> = ({ nameBtn, onclick }) => (
   <div className="view_more_btn">
     <button
       className="view_more_btn_content"
-      onClick={onclick ? onclick : () => {}}
+      onClick={onclick ? onclick : null}
     >
       {nameBtn}
     </button>

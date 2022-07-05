@@ -1,0 +1,15 @@
+.AMB-Currency {
+  margin: 0 !important;
+  font-size: inherit;
+
+  > .symbol {
+    &.left {
+      margin-right: 0.3em;
+      color: #808a9d;
+      font-weight: 600;
+    }
+  }
+}
+.inherit {
+  font-size: inherit;
+}

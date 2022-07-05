@@ -1,43 +1,30 @@
-import { useDebounce } from '../../hooks/useDebounce';
-import { TParams } from '../../types';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { OverallBalanceProps } from 'pages/Addresses/AddressDetails/address-details.interface';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
-const OverallBalance: React.FC<OverallBalanceProps> = ({
-  addressBalance = 0,
-}) => {
-  const { data: appData } = useTypedSelector((state: any) => state.app);
-  const { address }: TParams = useParams();
-  const [balance, setBalance] = useState<any>(Number(addressBalance));
-  const [amountInUsd, setAmountInUsd] = useState<any>(Number(addressBalance));
+//TODO refactor
+let amountInUsdBuffer = 0;
 
-  const balMemo = useMemo(
-    () => (balance ? Number(addressBalance) : Number(addressBalance)),
-    [address, addressBalance],
+const OverallBalance: React.FC<OverallBalanceProps> = ({ addressBalance }) => {
+  const [amountInUsd, setAmountInUsd] = useState(amountInUsdBuffer);
+  const [addressBalanceBuffer, setAddressBalanceBuffer] = useState(
+    +addressBalance,
   );
-  let amountInUsdMemo = useMemo(() => {
-    return (
-      (appData &&
-        appData?.total_price_usd &&
-        appData.total_price_usd &&
-        appData.total_price_usd * Number(addressBalance)) ||
-      0
-    );
-  }, [appData, address]);
+  const { data: appData } = useTypedSelector((state: any) => state.app);
 
-  const deboucePrice = useDebounce(amountInUsdMemo, 1000);
   useEffect(() => {
-    if (!balMemo || address) {
-      if (addressBalance) {
-        setBalance(addressBalance);
-      }
-      if (appData && appData?.total_price_usd && appData.total_price_usd) {
-        setAmountInUsd(appData.total_price_usd * Number(addressBalance));
-      }
+    if (
+      //TODO !addressBalance
+      addressBalance !== undefined &&
+      addressBalance !== null &&
+      appData?.total_price_usd
+    ) {
+      const usdPrice = appData.total_price_usd * +addressBalance;
+      amountInUsdBuffer = usdPrice;
+      setAmountInUsd(usdPrice);
+      setAddressBalanceBuffer(+addressBalance);
     }
-  }, [addressBalance, address, amountInUsd]);
+  }, [addressBalance]);
 
   return (
     <div className="address_details_info_text">
@@ -54,15 +41,13 @@ const OverallBalance: React.FC<OverallBalanceProps> = ({
         }}
       >
         <span className="address_details_info_text_span universall_dark">
-          {`${
-            balMemo ? Number(balMemo).toFixed(2) : Number(balance).toFixed(2)
-          } AMB`}{' '}
+          {`${isNaN(addressBalanceBuffer) ? 0.0 : addressBalanceBuffer} AMB`}{' '}
         </span>
         <span className="address_details_info_text_span universall_dark">
           /
         </span>
         <span className="address_details_info_text_span universall_light2">{`$ ${
-          amountInUsd ? amountInUsd.toFixed(2) : deboucePrice.toFixed(2)
+          amountInUsd === NaN ? 0.0 : amountInUsd.toFixed(2)
         }`}</span>
       </div>
     </div>

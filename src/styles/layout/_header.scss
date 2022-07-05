@@ -24,10 +24,15 @@
   display: flex;
   flex-direction: row;
   gap: 32px;
+  @include for_laptop {
+    gap: 19px;
+  }
 
   &_item {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+
+    justify-self: center;
     text-decoration: none;
     cursor: default;
     font-family: Proxima Nova, Aktiv Grotesk Corp;
@@ -38,6 +43,29 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #4d4d4d;
+
+    &_hover {
+      &:hover::after {
+        display: block;
+        background-color: #4d4d4d;
+
+        width: 14px;
+        height: 4px;
+        content: '';
+      }
+    }
+    &_active {
+      &::after {
+        display: block;
+        background-color: #fff !important;
+
+        width: 14px;
+        height: 4px;
+        content: '';
+        @include for_laptop {
+        }
+      }
+    }
   }
 
   &_btn {
@@ -53,5 +81,7 @@
 }
 
 .logo {
-  margin-right: 40px;
+  display: flex;
+  width: fit-content;
+  margin-right: 20px;
 }

@@ -4,6 +4,7 @@
   width: 100vw;
   margin: auto;
   flex-direction: column;
+  min-height: 450px;
 }
 
 .page {
@@ -12,13 +13,12 @@
   justify-content: center;
   width: 100%;
   flex: 1 0 auto;
-  background-color: #f6f6f6;
 }
 
 .container {
   width: 100%;
   max-width: 1140px;
   @include for_laptop {
-    padding: 0 20px;
+    padding: 5px 20px;
   }
 }

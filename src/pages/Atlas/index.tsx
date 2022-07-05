@@ -1,15 +1,18 @@
+import useSortData from '../../hooks/useSortData';
+import { getAtlasesData } from '../../services/atlas.service';
 import AtlasBlocksBody from './components/AtlasBlocksBody';
 import AtlasBlocksHeader from './components/AtlasBlocksHeader';
 import AtlasBlocksSort from './components/AtlasBlocksSort';
 import MainInfoAtlas from './components/MainInfoAtlas';
 import { Content } from 'components/Content';
-import useSortData from 'hooks/useSortData';
-import { getAtlasData } from 'services/atlas.service';
+import Loader from 'components/Loader';
+import React from 'react';
 
 export const Atlas = () => {
-  const { sortTerm, setSortTerm } = useSortData(getAtlasData);
-
-  const num = 6;
+  const { ref, sortTerm, setSortTerm, renderData, loading } = useSortData(
+    getAtlasesData,
+    'totalBundles',
+  );
 
   return (
     <Content>
@@ -17,22 +20,31 @@ export const Atlas = () => {
         <MainInfoAtlas />
       </Content.Header>
       <Content.Body>
-        <div className="Atlas_main">
+        <div className="atlas_main">
           <AtlasBlocksSort sortTerm={sortTerm} setSortTerm={setSortTerm} />
-
-          <div
-            className="Atlas_main_table"
-            style={{ gridTemplateColumns: `repeat(${num}, auto)` }}
-          >
+          <div className="atlas_main_table">
             <AtlasBlocksHeader />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
-            <AtlasBlocksBody />
+            {renderData && renderData.data && renderData.data.length
+              ? renderData.data.map((item: any, index: number) =>
+                  renderData.data.length - 1 === index &&
+                  renderData?.pagination?.hasNext ? (
+                    <AtlasBlocksBody
+                      lastCardRef={ref}
+                      key={index}
+                      index={index + 1}
+                      item={item}
+                    />
+                  ) : (
+                    <AtlasBlocksBody
+                      key={index}
+                      index={index + 1}
+                      item={item}
+                    />
+                  ),
+                )
+              : null}
           </div>
+          {!loading && renderData?.pagination?.hasNext && <Loader />}
         </div>
       </Content.Body>
     </Content>

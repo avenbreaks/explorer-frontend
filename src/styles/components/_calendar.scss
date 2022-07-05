@@ -2,7 +2,11 @@
   margin-top: 8px;
   z-index: 1;
   border-radius: 12px;
-
+  position: absolute;
+  z-index: 10;
+  @include for_tablet {
+    margin-top: 16px;
+  }
   &_export_csv {
     position: relative;
     right: -24px;
@@ -31,7 +35,7 @@
   box-shadow: 4px 8px 8px rgb(0 0 0 / 25%);
   border-radius: 12px;
   border-collapse: collapse;
-  height: 385px;
+  height: 420px;
   width: 400px;
   @include for_small_phone {
     width: 320px;

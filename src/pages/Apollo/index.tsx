@@ -1,16 +1,18 @@
+import Loader from '../../components/Loader';
+import useSortData from '../../hooks/useSortData';
+import { getApollosData } from '../../services/apollo.service';
 import ApolloBlocksBody from './components/ApolloBlocksBody';
 import ApolloBlocksHeader from './components/ApolloBlocksHeader';
 import ApolloBlocksSort from './components/ApolloBlocksSort';
 import MainInfoApollo from './components/MainInfoApollo';
 import { Content } from 'components/Content';
-import useSortData from 'hooks/useSortData';
-import { getApolloData } from 'services/apollo.service';
+import React from 'react';
 
 export const Apollo = () => {
-  const { sortTerm, setSortTerm } = useSortData(getApolloData);
-
-  const num = 6;
-
+  const { ref, sortTerm, setSortTerm, renderData, loading } = useSortData(
+    getApollosData,
+    ' ',
+  );
   return (
     <Content>
       <Content.Header>
@@ -19,20 +21,32 @@ export const Apollo = () => {
       <Content.Body>
         <div className="apollo_main">
           <ApolloBlocksSort sortTerm={sortTerm} setSortTerm={setSortTerm} />
-
           <div
             className="apollo_main_table"
-            style={{ gridTemplateColumns: `repeat(${num}, auto)` }}
+            style={{ gridTemplateColumns: `repeat(${6}, auto)` }}
           >
             <ApolloBlocksHeader />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
-            <ApolloBlocksBody />
+            {renderData && renderData.data && renderData.data.length
+              ? renderData.data.map((item: any, index: number) =>
+                  renderData.data.length - 1 === index &&
+                  renderData?.pagination?.hasNext ? (
+                    <ApolloBlocksBody
+                      lastCardRef={ref}
+                      key={index}
+                      index={index + 1}
+                      item={item}
+                    />
+                  ) : (
+                    <ApolloBlocksBody
+                      key={index}
+                      index={index + 1}
+                      item={item}
+                    />
+                  ),
+                )
+              : null}
           </div>
+          {!loading && renderData?.pagination?.hasNext && <Loader />}
         </div>
       </Content.Body>
     </Content>

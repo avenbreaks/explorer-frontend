@@ -1,6 +1,7 @@
+import { log } from '../utils/helpers';
 import axios from 'axios';
 
-const tokenApiUrl = process.env.REACT_APP_TOKEN_API_URL;
+const tokenApiUrl: any = process.env.REACT_APP_TOKEN_API_URL;
 
 const baseApiUrl = process.env.REACT_APP_API_ENDPOINT;
 const API = () => {
@@ -10,9 +11,8 @@ const API = () => {
 
   function handleNotFound(err: any) {
     if (err) {
-      console.error(err);
+      log(err);
     }
-    window.location.replace('/notfound');
   }
 
   api.interceptors.response.use(
@@ -67,7 +67,18 @@ const getApollo = (address: any) => {
 
 const getApolloRewards = (address: any, params: any) => {
   const url = `apollos/${address}/rewards`;
-  return API().get(url, { params });
+  const parameterFrom = params?.from?.split('/') || null;
+  const parameterTo = params?.to?.split('/') || null;
+  const newParams =
+    parameterTo !== null
+      ? {
+          from: `${parameterFrom[1]}/${parameterFrom[0]}/${parameterFrom[2]}`,
+          to: `${parameterTo[1]}/${parameterTo[0]}/${parameterTo[2]}`,
+        }
+      : {
+          from: `${parameterFrom[1]}/${parameterFrom[0]}/${parameterFrom[2]}`,
+        };
+  return API().get(url, { params: newParams });
 };
 
 const getTransaction = (hash: any) => {
@@ -133,8 +144,8 @@ const getBundleEvents = (bundleId: any, params = {}) => {
   });
 };
 
-const getBundleWithEntries = (bundleId: any) => {
-  return axios
+const getBundleWithEntries = async (bundleId: any) => {
+  const data = await axios
     .all([
       getBundle(bundleId),
       getBundleAssets(bundleId),
@@ -149,6 +160,7 @@ const getBundleWithEntries = (bundleId: any) => {
         };
       }),
     );
+  return data;
 };
 
 const searchItem = (term: any) => {
@@ -166,7 +178,6 @@ const getInfo = () => {
 };
 
 const getToken = () => {
-  // @ts-ignore
   return axios.get(tokenApiUrl).then(({ data }) => data.data);
 };
 
@@ -186,11 +197,13 @@ const getTokenTotalSupply = () => {
     });
 };
 
-const followTheLinkRange = (fromDate: any, toDate: any, address: any) => {
+const followTheLinkRange = async (fromDate: any, toDate: any, address: any) => {
   const link = `${baseApiUrl}/transactions/csv/address/${address}`;
   const from = fromDate / 1000;
   const to = toDate / 1000;
   window.open(`${link}/dateFrom/${from}/dateTo/${to}`, '_self');
+  const data = await fetch(`${link}/dateFrom/${from}/dateTo/${to}`);
+  return data;
 };
 
 const api = {

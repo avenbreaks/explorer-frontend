@@ -15,11 +15,9 @@ const TokenModal: FC<TokenModalProps> = ({
 
   useEffect(() => {
     if (name) {
-      const newTokensList =
-        addressData &&
-        addressData?.tokens.filter((token: TokenType) =>
-          token.name.toLowerCase().includes(name.toLowerCase()),
-        );
+      const newTokensList = addressData?.tokens.filter((token: TokenType) =>
+        token.name.toLowerCase().includes(name.toLowerCase()),
+      );
       setFilteredTokensList(newTokensList || []);
       if (!newTokensList.length) {
         setFilteredTokensList(addressData?.tokens || []);
@@ -27,8 +25,13 @@ const TokenModal: FC<TokenModalProps> = ({
     }
   }, [name, addressData?.tokens, selectedToken]);
 
+  const isScroll =
+    addressData?.tokens?.length > 5
+      ? 'token_modal token_modal_scroll'
+      : 'token_modal';
+
   return (
-    <div className="token_modal" tabIndex={0}>
+    <div className={isScroll}>
       {addressData?.tokens?.length ? (
         <>
           <div>
@@ -38,25 +41,31 @@ const TokenModal: FC<TokenModalProps> = ({
             </div>
             <div className="token_modal_arrows" />
           </div>
-          {!filteredTokensList.length
-            ? addressData?.tokens.map(
-                (token: { name: string; idx: number }) => (
-                  <TokenItem
-                    key={token.name + token.idx}
-                    selectedToken={selectedToken}
-                    token={token}
-                    setToken={setToken}
-                  />
-                ),
-              )
-            : filteredTokensList.map((token: { name: string; idx: number }) => (
-                <TokenItem
-                  key={token.name + token.idx}
-                  selectedToken={selectedToken}
-                  token={token}
-                  setToken={setToken}
-                />
-              ))}
+
+          {
+            //TODO double code
+            !filteredTokensList.length
+              ? addressData?.tokens.map(
+                  (token: { name: string; idx: number }) => (
+                    <TokenItem
+                      key={token.name + token.idx}
+                      selectedToken={selectedToken}
+                      token={token}
+                      setToken={setToken}
+                    />
+                  ),
+                )
+              : filteredTokensList.map(
+                  (token: { name: string; idx: number }) => (
+                    <TokenItem
+                      key={token.name + token.idx}
+                      selectedToken={selectedToken}
+                      token={token}
+                      setToken={setToken}
+                    />
+                  ),
+                )
+          }
         </>
       ) : (
         <div>

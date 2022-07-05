@@ -1,42 +1,85 @@
+import { TParams } from '../types';
 import { AccountsData } from 'pages/Addresses/addresses.interface';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import removeArrayDuplicates from 'utils/helpers';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import removeArrayDuplicates, { log } from 'utils/helpers';
 
-const useSortData = (getData: any) => {
-  const [renderData, setRenderData] = React.useState<AccountsData>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [sortTerm, setSortTerm] = React.useState<string>('balance');
+const useSortData = (getData: any, firstSortTerm: any = '') => {
+  const { address, type = '' }: TParams = useParams();
+
+  const [renderData, setRenderData] = React.useState<AccountsData | null>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [sortTerm, setSortTerm] = React.useState(firstSortTerm);
   const { ref, inView } = useInView();
+  const navigate = useNavigate();
 
-  const loadingMock = (): void => {
+  const { pathname } = useLocation();
+
+  const firstRender = () => {
     setLoading(true);
-    setTimeout(() => {
+
+    getData(sortTerm, null, address).then((res: AccountsData) => {
+      if (res?.meta?.message?.includes('No results')) {
+        setLoading(false);
+        setRenderData(null);
+        return;
+      }
+      setRenderData(res);
       setLoading(false);
-    }, 1000);
+    });
   };
 
   useEffect(() => {
-    const next = '';
-    getData(sortTerm, next).then((res: AccountsData) => {
-      setRenderData(res);
-    });
-  }, []);
+    if (
+      type?.length &&
+      !(
+        type === '' ||
+        type === 'transfers' ||
+        type === 'block_rewards' ||
+        type === 'sheltering' ||
+        type === 'assets' ||
+        type === 'events'
+      )
+    ) {
+      log('not found term "', type, '"');
+      navigate(`/notfound`, { replace: true });
+    }
+    firstRender();
+  }, [pathname]);
 
-  useEffect(() => {
-    const next = '';
-    getData(sortTerm, next).then((res: AccountsData) => {
-      setRenderData(res);
-    });
-  }, [sortTerm]);
+  const updateData = useCallback(() => {
+    if (sortTerm) {
+      setLoading(true);
+      getData(sortTerm, null, address).then((res: AccountsData) => {
+        if (res?.meta?.message?.includes('No results')) {
+          setLoading(false);
+          setRenderData(null);
+          return;
+        }
+        setRenderData(res);
+        setLoading(false);
+      });
+    }
+  }, [sortTerm, pathname]);
 
-  useEffect(() => {
+  useEffect(updateData, [sortTerm]);
+
+  const concatData = useCallback(() => {
+    if (sortTerm === 'contracts') return;
+
     if (inView) {
-      const next: string = renderData?.pagination.next;
+      setLoading(true);
+      const next: string = renderData?.pagination?.next;
       if (next) {
-        loadingMock();
-        getData(sortTerm, next).then((res: AccountsData) => {
+        getData(sortTerm, next, address).then((res: AccountsData) => {
+          if (res?.meta?.message?.includes('No results')) {
+            setLoading(false);
+            setRenderData(null);
+            return;
+          }
           setRenderData((prev: AccountsData) => {
+            setLoading(false);
             return {
               ...prev,
               data: removeArrayDuplicates([...prev.data, ...res?.data]),
@@ -48,7 +91,9 @@ const useSortData = (getData: any) => {
     }
   }, [inView]);
 
-  return { ref, sortTerm, setSortTerm, renderData, loading };
+  useEffect(concatData, [inView]);
+
+  return { ref, sortTerm, setSortTerm, renderData, loading, setRenderData };
 };
 
 export default useSortData;

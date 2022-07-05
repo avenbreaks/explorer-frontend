@@ -1,17 +1,29 @@
 import { actionTypes } from '../action-types';
-import { AppDataAction, FiltersAction, PositionAction } from '../actions';
+import {
+  AppDataAction,
+  BunleDataAction,
+  FiltersAction,
+  PositionAction,
+} from '../actions';
 import API from 'API/api';
+import { useParams } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { CLIENT_VERSION } from 'utils/constants';
 
 export const setAppDataAsync = () => {
+  /*
+  @param {void}
+  @returns {Promise<AppDataAction>}
+   */
+
   return async (dispatch: Dispatch<AppDataAction>) => {
     dispatch({
       type: actionTypes.SET_APP_DATA__START,
     });
     try {
+      //TODO промис ол
       const netInfo = await API.getInfo();
-
+      // https://token.ambrosus.io/price
       const tokenInfo = await API.getToken().then(async (info = {}) => {
         const totalSupply = await API.getTokenTotalSupply().then(
           (totalSupplyToken = {}) => {
@@ -34,7 +46,6 @@ export const setAppDataAsync = () => {
         total_price_usd: total_price_usd,
       };
       /*
-       * Получаем данные из сервера
        * @param {string} url - адрес запроса
        * @returns {Promise<AppDataAction>}
        */
@@ -57,7 +68,6 @@ export const setPosition: any = (promiseFunc: any, ...params: any) => {
       type: actionTypes.SET_POSITION__START,
     });
     try {
-      // @ts-ignore
       const result = await promiseFunc(...params);
       dispatch({
         type: actionTypes.SET_POSITION__SUCCESS,
@@ -80,19 +90,36 @@ export const addFilter: any = (filter: object) => {
     });
   };
 };
-export const removeFilter: any = (filter: object) => {
-  return async (dispatch: Dispatch<FiltersAction>) => {
-    dispatch({
-      type: actionTypes.REMOVE_FILTER,
-      payload: filter,
-    });
-  };
-};
+
 export const clearFilters: any = () => {
   return async (dispatch: Dispatch<FiltersAction>) => {
     dispatch({
       type: actionTypes.CLEAR_FILTERS,
       payload: null,
     });
+  };
+};
+
+export const getBundlesData = () => {
+  return async (dispatch: Dispatch<BunleDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_BUNDLE_DATA__START,
+    });
+    try {
+      const result = await API.getBundles({
+        limit: 20,
+        next: null,
+      });
+
+      dispatch({
+        type: actionTypes.SET_BUNDLE_DATA__SUCCESS,
+        payload: result,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_BUNDLE_DATA__FAIL,
+        payload: error.message,
+      });
+    }
   };
 };

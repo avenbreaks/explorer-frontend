@@ -1,3 +1,4 @@
+import AmbPrice from 'assets/icons/MainInfo/AmbPrice';
 import Bundles from 'assets/icons/MainInfo/Bundles';
 import Holders from 'assets/icons/MainInfo/Holders';
 import MarketCap from 'assets/icons/MainInfo/MarketCap';
@@ -10,6 +11,10 @@ const getMainInfoIcon = (icon: string) => {
   switch (icon) {
     case 'BUNDLES':
       return <Bundles />;
+
+    case 'AMB PRICE':
+      return <AmbPrice />;
+
     case 'HOLDERS':
       return <Holders />;
 
@@ -31,13 +36,13 @@ moment.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
     past: '%s ago',
-    s: 'a secs',
+    s: '%d secs',
     ss: '%d secs',
-    m: 'a mins',
+    m: '%d mins',
     mm: '%d mins',
-    h: 'an hour',
+    h: '%d hour',
     hh: '%d hours',
-    d: 'a day',
+    d: '%d day',
     dd: '%d days',
     w: 'a week',
     ww: '%d weeks',

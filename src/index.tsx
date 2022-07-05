@@ -1,8 +1,9 @@
 import Main from './components/Main/Main';
-import ScrollToTop from './components/ScrollToTop';
 import { store } from './state';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -11,13 +12,18 @@ import { BrowserRouter } from 'react-router-dom';
  * @param {BrowserRouter} BrowserRouter - react router
  * @param {Main} Main - main component
  */
+
+const queryClient = new QueryClient();
+
 export const App = (): JSX.Element => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <ScrollToTop />
-      <Main />
-    </BrowserRouter>
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </Provider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
 );
 
 const container = document.getElementById('root') as HTMLElement;

@@ -10,7 +10,9 @@
   &_cells {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    height: 72px;
+    grid-gap: 6px;
+    height: 73px;
+
     border-bottom: 1px solid $secondary;
     @include for_phone {
       white-space: nowrap;
@@ -20,10 +22,18 @@
   &_cell {
     display: grid;
     align-items: center;
+    grid-template-rows: repeat(2, auto);
+    gap: 8px;
+    padding: 12px 0;
+
+    @include for_small_phone {
+      padding: 12px 0 9px 0;
+    }
 
     &_content {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      height: 20px;
     }
   }
 
@@ -44,7 +54,7 @@
     line-height: 1.33em;
     font-weight: 600;
     @include for_small_phone {
-      font-size: 12px;
+      font-size: 13px;
     }
   }
 
@@ -55,7 +65,7 @@
     font-weight: 400;
     color: $main-medium;
     @include for_small_phone {
-      font-size: 10px;
+      font-size: 11px;
     }
   }
 

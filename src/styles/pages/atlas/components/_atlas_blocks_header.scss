@@ -1,16 +1,47 @@
 .atlas_blocks_header {
   display: grid;
-  grid-template-columns: 82px 405px 190px 117px 180px 192px;
+  grid-template-columns:
+    minmax(50px, 1fr)
+    minmax(360px, 6fr)
+    minmax(150px, 3fr)
+    minmax(80px, 2fr)
+    minmax(190px, 3fr)
+    minmax(150px, 3fr);
+  height: 36px;
+  grid-gap: 32px;
 
   &_cell {
     display: flex;
     align-items: center;
+    padding-top: 12px;
     font-weight: 700;
     font-size: 12px;
     line-height: 32px;
-    height: 48px;
     white-space: nowrap;
     padding-right: 32px;
     padding-left: 5px;
+  }
+  &_btn {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 32px;
+    white-space: nowrap;
+  }
+  &_status {
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+
+    &_modal {
+      position: absolute;
+      top: 423px;
+      margin-left: -8px;
+
+      background: #ffffff;
+      border: 1px solid #eff2f5;
+      box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      z-index: 50;
+    }
   }
 }

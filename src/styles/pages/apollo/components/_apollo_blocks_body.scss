@@ -1,32 +1,49 @@
 .apollo_blocks_body {
   display: grid;
-  // grid-template-columns: repeat(6, auto);
-  grid-template-columns: 82px 405px 190px 117px 180px 192px;
+  grid-template-columns:
+    minmax(50px, 1fr)
+    minmax(360px, 6fr)
+    minmax(150px, 3fr)
+    minmax(80px, 2fr)
+    minmax(190px, 3fr)
+    minmax(150px, 3fr);
+  border-bottom: 1px solid #eff2f5;
 
-  //   flex-direction: column;
+  grid-gap: 32px;
+
+  &:hover {
+    background-color: #eff2f5;
+  }
   .balance {
     width: max-content;
     white-space: nowrap;
   }
 
-  &:hover {
-    background-color: #eff2f5;
-  }
-
   &_cell {
     align-items: center;
-    border-bottom: 1px solid #eff2f5;
     white-space: nowrap;
     display: flex;
     font-weight: 400;
     font-size: 14px;
     line-height: 24px;
     height: 48px;
-    padding-right: 32px;
     padding-left: 5px;
 
-    // &:nth-child(1) {
-    //   padding-left: 10px;
-    // }
+    &_token {
+      padding: 0 6px;
+      color: #808a9d;
+      font-weight: 600;
+    }
+    &_value {
+      padding-right: 6px;
+    }
+
+    &_online {
+      color: #1acd8c;
+      padding-right: 4px;
+    }
+    &_offline {
+      color: #bfc9e0;
+    }
   }
 }

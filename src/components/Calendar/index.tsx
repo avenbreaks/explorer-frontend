@@ -7,34 +7,68 @@ import 'react-date-range/dist/theme/default.css';
 import { useParams } from 'react-router-dom';
 import { TParams } from 'types';
 
-const Calendar = () => {
+const Calendar = ({
+  setIsLoading,
+  handleClose,
+  miningStats = undefined,
+}: any) => {
   const { address }: TParams = useParams();
 
   const [dataRange, setDataRange] = useState([
     {
       startDate: new Date(),
-      endDate: addDays(new Date(), -4),
+      endDate: addDays(new Date(), 0),
       color: '#05060F',
       key: 'selection',
     },
   ]);
+  const changeData = (item: any) => {
+    setDataRange([item.selection]);
+  };
 
-  const changeData = (item: any) => setDataRange([item.selection]);
+  function padTo2Digits(num: any) {
+    return num.toString().padStart(2, '0');
+  }
 
-  const exportData = () => {
+  function formatDate(date: any) {
+    return [
+      padTo2Digits(date.getDate()),
+      padTo2Digits(date.getMonth() + 1),
+      date.getFullYear(),
+    ].join('/');
+  }
+
+  const exportCallback = async () => {
     if (dataRange) {
-      API.followTheLinkRange(
+      return await API.followTheLinkRange(
         dataRange[0].startDate,
         dataRange[0].endDate,
         address,
       );
     } else {
-      API.followTheLinkRange(0, 0, address);
+      return await API.followTheLinkRange(0, 0, address);
     }
+  };
+  const exportData = async () => {
+    if (miningStats !== undefined) {
+      const str = `${formatDate(dataRange[0].startDate)}-${formatDate(
+        dataRange[0].endDate,
+      )}`;
+
+      miningStats(str);
+    } else {
+      setIsLoading(true);
+      setTimeout(() => {
+        exportCallback().then((d) => {
+          setIsLoading(false);
+        });
+      }, 0);
+    }
+    handleClose();
   };
 
   return (
-    <div className="calendar">
+    <>
       <DateRange
         editableDateInputs={true}
         onChange={changeData}
@@ -42,9 +76,9 @@ const Calendar = () => {
         ranges={dataRange}
       />
       <button className="calendar_export_csv" onClick={exportData}>
-        Export CSV
+        {miningStats ? 'Select' : ' Export CSV'}
       </button>
-    </div>
+    </>
   );
 };
 

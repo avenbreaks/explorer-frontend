@@ -19,11 +19,16 @@ export type OverallBalanceProps = {
 
 export interface TabsProps {
   lastCardRef?: any;
+  pageNum?: any;
   selectedToken: TokenType | null;
   transactionType?: string;
   data: any;
   onClick: any;
   setTransactionType: any;
+  isIcon: boolean;
+  loading?: boolean;
+  sortOptions?: any;
+  isContract?: boolean;
 }
 
 export type TransactionProps = {
@@ -66,6 +71,11 @@ export interface AddressBlockProps {
   setTransactionType?: any;
   onClick?: any;
   isLatest?: boolean;
+  isTableColumn?: string;
+  isIcon?: boolean;
+  inners?: any[];
+  innerLevel?: number;
+  hashOnClick?: (hash: string | number) => any;
 }
 
 export interface TokenProps {

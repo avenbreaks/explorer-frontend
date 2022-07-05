@@ -10,8 +10,7 @@
     display: flex;
     flex-direction: column;
     min-height: 600px;
-    flex-grow: 1;
-
+    flex: 1;
     min-width: 320px;
   }
 
@@ -67,9 +66,7 @@
       font-weight: 700;
       font-size: 18px;
       line-height: 32px;
-      @include for_phone {
-        display: none;
-      }
+
     }
 
     &_cells {
