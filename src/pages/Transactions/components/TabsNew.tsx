@@ -18,8 +18,14 @@ const TabsNew: FC<TabsNewProps> = ({
   withoutCalendar,
 }) => {
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [tab, setTab] = useState('');
   const [isShow, setIsShow] = useState(false);
+
+  const handleClose = () => {
+    setIsShow((prevState) => !prevState);
+  };
 
   const { ref, inView } = useInView();
   const [tabData, setTabData] = useState<AccountsData>({
@@ -103,7 +109,7 @@ const TabsNew: FC<TabsNewProps> = ({
               ref={mobileCalendarRef}
               className="tabs_heading_export_modal_mobile"
             >
-              <Calendar />
+              <Calendar handleClose={handleClose} setIsLoading={setIsLoading} />
             </div>
           )}
           {!withoutCalendar && (

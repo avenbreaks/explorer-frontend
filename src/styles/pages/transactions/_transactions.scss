@@ -16,6 +16,9 @@
     margin: 0 auto;
     padding: 0;
     transform: translateX(-17px);
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     @include for_laptop {
       transform: none;
