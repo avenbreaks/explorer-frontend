@@ -1,7 +1,20 @@
 import { actionTypes } from '../action-types';
-import { AppDataAction, FiltersAction, PositionAction } from '../actions';
+import {
+  AddressesDataAction,
+  ApolloDataAction,
+  AppDataAction,
+  AtlasDataAction,
+  BlocksDataAction,
+  BunlesDataAction,
+  FiltersAction,
+  HermesDataAction,
+  HomeDataAction,
+  PositionAction,
+  TransactionsDataAction,
+} from '../actions';
 import API from 'API/api';
 import { Dispatch } from 'redux';
+import { ActionsFetch } from 'state/state.interface';
 import { CLIENT_VERSION } from 'utils/constants';
 
 export const setAppDataAsync = () => {
@@ -94,41 +107,225 @@ export const clearFilters: any = () => {
   };
 };
 
-// export const getBundlesData = (
-//   address: any = null,
-//   params = { limit: 20, next: null },
-// ) => {
-//   return async (dispatch: Dispatch<BunleDataAction>) => {
-//     dispatch({
-//       type: actionTypes.SET_BUNDLE_DATA__START,
-//     });
-//     try {
-//       const bundle = await API.getBundle(address);
-//       const bundlesData = await API.getBundles({
-//         params,
-//       });
-//       const bundleAssets = await API.getBundleAssets(address, {
-//         params,
-//       });
-//       const bundleEvents = await API.getBundleEvents(address, {
-//         params,
-//       });
-//       const result = {
-//         bundle: bundle,
-//         bundlesData: bundlesData,
-//         bundleAssets: bundleAssets,
-//         bundleEvents: bundleEvents,
-//       };
+// pages actions
 
-//       dispatch({
-//         type: actionTypes.SET_BUNDLE_DATA__SUCCESS,
-//         payload: result,
-//       });
-//     } catch (error: any) {
-//       dispatch({
-//         type: actionTypes.SET_BUNDLE_DATA__FAIL,
-//         payload: error.message,
-//       });
-//     }
-//   };
-// };
+export const getAddressesData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<AddressesDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_ADDRESSES_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_ADDRESSES_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_ADDRESSES_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getApolloData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<ApolloDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_APOLLO_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_APOLLO_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_APOLLO_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getAtlasData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<AtlasDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_ATLAS_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_ATLAS_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_ATLAS_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getBundlesData = (
+  address: any = '',
+  params: any = { limit: 20, next: null },
+) => {
+  return async (dispatch: Dispatch<BunlesDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_BUNDLES_DATA__START,
+    });
+    try {
+      const bundle = await API.getBundle(address);
+      const bundlesData = await API.getBundles(params);
+      const bundleAssets = await API.getBundleAssets(address, {
+        params,
+      });
+      const bundleEvents = await API.getBundleEvents(address, {
+        params,
+      });
+      const bundleInfo = await API.getInfo();
+
+      dispatch({
+        type: actionTypes.SET_BUNDLES_DATA__SUCCESS,
+        payload: {
+          gitTagVersion: CLIENT_VERSION,
+          // bundle: bundle,
+          // bundlesData: bundlesData,
+          // bundleAssets: bundleAssets,
+          // bundleEvents: bundleEvents,
+          bundleInfo: bundleInfo,
+        },
+      });
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_BUNDLES_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getBlocksData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<BlocksDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_BLOCKS_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_BLOCKS_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_BLOCKS_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getHermesData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<HermesDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_HERMES_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_HERMES_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_HERMES_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getHomeData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<HomeDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_HOME_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_HOME_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_HOME_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const getTransactionsData: ActionsFetch = (
+  address,
+  params = { limit: 20, next: null, sort: '' },
+) => {
+  return (dispatch: Dispatch<TransactionsDataAction>) => {
+    dispatch({
+      type: actionTypes.SET_TRANSACTIONS_DATA__START,
+    });
+    try {
+      Promise.all([]).then((res) =>
+        dispatch({
+          type: actionTypes.SET_TRANSACTIONS_DATA__SUCCESS,
+          payload: {
+            gitTagVersion: CLIENT_VERSION,
+          },
+        }),
+      );
+    } catch (error: any) {
+      dispatch({
+        type: actionTypes.SET_TRANSACTIONS_DATA__FAIL,
+        payload: error.message,
+      });
+    }
+  };
+};
