@@ -1,4 +1,5 @@
 import HeadInfo from 'components/HeadInfo';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 import { NavLink } from 'react-router-dom';
 import { BUNDLE_MAX_LOAD } from 'utils/constants';
 import {
@@ -53,7 +54,14 @@ const BundleDetailsMainTabs = ({ data }: any) => {
     {
       _id: 2,
       name: 'TX HASH',
-      value: sliceData10(data?.txHash, 12),
+      value: (
+        <NavLink
+          to={`/transactions/${data?.txHash}`}
+          style={{ color: '#808A9D' }}
+        >
+          {sliceData10(data?.txHash, 12)}
+        </NavLink>
+      ),
       style: {
         color: '#808A9D',
       },

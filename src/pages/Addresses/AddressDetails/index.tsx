@@ -69,23 +69,23 @@ const AddressDetails = () => {
   };
 
   useEffect(() => {
+    if (address?.trim() === '0x0000000000000000000000000000000000000000') {
+      navigate(`/notfound`);
+    }
     if (tokenToSorted?.length && tokenToSorted !== 'transfers') {
-      navigate(`/notfound`, { replace: true });
+      navigate(`/notfound`);
     }
     if (
       type?.length &&
       !(type === 'ERC-20_Tx' || type === 'transfers' || type === 'contract')
     ) {
-      navigate(`/notfound`, { replace: true });
+      navigate(`/notfound`);
     }
 
     if (address) {
       API.searchItem(address)
-        .then(
-          (data: any) =>
-            !data.meta.search && navigate(`/notfound`, { replace: true }),
-        )
-        .catch(() => navigate(`/notfound`, { replace: true }));
+        .then((data: any) => !data.meta.search && navigate(`/notfound`))
+        .catch(() => navigate(`/notfound`));
     }
   }, []);
 
@@ -211,7 +211,9 @@ const AddressDetails = () => {
               className="address_details_copy"
               style={{ fontSize: isContract ? 18 : '2.3rem' }}
             >
-              {isContract && <span> {FOR_TABLET ? <span>Address:&nbsp;</span> : null} </span>}
+              {isContract && (
+                <span> {FOR_TABLET ? <span>Address:&nbsp;</span> : null} </span>
+              )}
               {address}
               &nbsp; &nbsp;
               <CopyBtn />

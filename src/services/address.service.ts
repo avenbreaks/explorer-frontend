@@ -241,10 +241,11 @@ const bbDataFilter = async (
 
 async function explorerData(address: string, { page, limit, type }: any) {
   try {
-    const { data: explorerTrans } = await API.getAccountTx(address, {
+    const { data: explorerTrans } = await API.getAccountTx({
       page,
       limit,
       type,
+      address,
     });
 
     return explorerTrans.map((t: ExplorerTxType) => {
@@ -259,6 +260,7 @@ async function explorerData(address: string, { page, limit, type }: any) {
         token: 'Amber',
         symbol: 'AMB',
         txFee: ethers.utils.formatUnits(t?.gasCost?.wei, 18),
+        inners: t?.inners,
       };
     });
   } catch (e) {
