@@ -1,11 +1,10 @@
-import CopyIcon from '../CopyIcon';
-import FullScreeDataModal from '../Modal/FullScreeDataModal';
-import API from 'API/api';
 import Link from 'assets/icons/Link';
+import ContractCopyBtn from 'components/ContractCopyBtn';
+import ConstractSideBtn from 'components/ContractSideBtn';
+import FullScreeDataModal from 'components/FullScreeDataModal';
 import Loader from 'components/Loader';
-import NodeHeader from 'components/NodeHeader';
 import useDeviceSize from 'hooks/useDeviceSize';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getAccountData, getContractData } from 'services/contract.service';
@@ -16,7 +15,7 @@ const Code = () => {
 
   const [abiToRender, setAbiToRender] = useState<any>([]);
   const [showMore, setShowMore] = useState(false);
-  const showMoreRef: any = useRef(null);
+  const showMoreRef = useRef<HTMLInputElement>(null);
 
   const { FOR_TABLET } = useDeviceSize();
 
@@ -25,15 +24,27 @@ const Code = () => {
     () => getContractData(address),
   );
 
-  const { data: accountData, isLoading: isLoad } = useQuery(
-    `account data ${address}`,
-    () => getAccountData(address),
+  const { data: accountData } = useQuery(`account data ${address}`, () =>
+    getAccountData(address),
   );
 
-  const files = contractData?.data?.files || [];
+  const files = useMemo(
+    () => contractData?.data?.files || [],
+    [contractData?.data?.files],
+  );
+  const fileElement: any = document.getElementById(
+    window.location.hash.replace('#', ''),
+  );
 
-  const filesToRender: any = files.filter(
-    (file: any) => file.name !== 'metadata.json',
+  useEffect(() => {
+    if (fileElement) {
+      fileElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [fileElement]);
+
+  const filesToRender: [] = useMemo(
+    () => files.filter((file: any) => file.name !== 'metadata.json'),
+    [files],
   );
 
   useEffect(() => {
@@ -52,7 +63,10 @@ const Code = () => {
     }
   };
 
-  console.log(filesToRender);
+  const JSONItem = useMemo(
+    () => JSON.stringify(abiToRender, null, ' '),
+    [abiToRender],
+  );
 
   return (
     <div>
@@ -60,30 +74,30 @@ const Code = () => {
       <div className="files">
         {filesToRender.length ? (
           filesToRender.map((file: any, index: any) => (
-            <div className="code-section" key={index}>
+            <div className="code-section" key={index} id={file.name}>
               <div className="code-section-header">
                 <div className="code-section-header-title">
                   <h3>
                     <span>
-                      File {index + 1} of {files.length - 1}:
+                      {`File ${index + 1} of ${filesToRender.length}`}:
                     </span>{' '}
                     {file.name}
                   </h3>
                 </div>
                 <div className="code-section-header-actions">
-                  <CopyIcon content={file.content} />
-                  <div className="btn-contract-icon">
-                    <Link />
-                  </div>
-                  <div className="btn-contract-icon">
-                    <FullScreeDataModal text={file.content} />
-                  </div>
+                  <ConstractSideBtn
+                    content={file.content}
+                    fileOf={`File ${index + 1} of ${filesToRender.length}`}
+                    name={file.name}
+                  />
                 </div>
               </div>
               <div className="code-section-body">
                 <pre className="counter">
                   {file.content.split('\n').map((line: any, index: any) => (
-                    <span key={index}>{line}</span>
+                    <span key={index} className="universall_ibm_font">
+                      {line}
+                    </span>
                   ))}
                 </pre>
               </div>
@@ -101,20 +115,22 @@ const Code = () => {
               <h2 className="contract-tab-title">Contract Abi</h2>
             </div>
             <div className="code-section-header-actions">
-              <CopyIcon content={JSON.stringify(abiToRender, null, ' ')} />
-              <div className="btn-contract-icon">
-                <Link />
-              </div>
-              <div className="btn-contract-icon">
-                <FullScreeDataModal
-                  text={JSON.stringify(abiToRender, null, ' ')}
-                />
-              </div>
+              <ConstractSideBtn
+                content={JSONItem}
+                fileOf={null}
+                name={'Contract Abi'}
+              />
             </div>
           </div>
           <div className="code-section-body">
             <pre className="no-counter">
-              {JSON.stringify(abiToRender, null, ' ')}
+              <ol style={{ paddingLeft: 40 }}>
+                {JSONItem?.split('\n').map((line: any, index: any) => (
+                  <li key={index} className="universall_ibm_font">
+                    {line}
+                  </li>
+                ))}
+              </ol>
             </pre>
           </div>
         </div>
@@ -127,21 +143,21 @@ const Code = () => {
               <h2 className="contract-tab-title">Contract Byte Code</h2>
             </div>
             <div className="code-section-header-actions">
-              <CopyIcon content={accountData?.data?.byteCode} />
-              <div className="btn-contract-icon">
-                <Link />
-              </div>
-              <div className="btn-contract-icon">
-                <FullScreeDataModal text={accountData?.data?.byteCode} />
-              </div>
+              <ConstractSideBtn
+                content={accountData?.data?.byteCode}
+                fileOf={null}
+                name="Contract Byte Code"
+              />
             </div>
           </div>
 
           {accountData?.data?.isContract && (
             <div className="wrapper-bytes" ref={showMoreRef}>
               <p
-                className={`${!showMore ? 'gradient-text' : ''}`}
-                style={{ wordWrap: 'break-word' }}
+                className={`${
+                  !showMore ? 'gradient-text' : ''
+                } universall_ibm_font`}
+                style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
               >
                 {showMore
                   ? accountData?.data?.byteCode
@@ -150,9 +166,9 @@ const Code = () => {
                       FOR_TABLET ? 900 : 320,
                     )}`}
               </p>
-              <button className="read-more-btn" onClick={showMoreRefHandler}>
+              {/* <button className="read-more-btn" onClick={showMoreRefHandler}>
                 {showMore ? 'Show less' : 'Show more'}
-              </button>
+              </button> */}
             </div>
           )}
         </div>
