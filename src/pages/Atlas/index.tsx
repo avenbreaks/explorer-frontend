@@ -53,7 +53,7 @@ export const Atlas = () => {
       </Content.Header>
       <Content.Body>
         <TabsNew
-          tableHeader={() => <AtlasBlocksHeader />}
+          tableHeader={() => <AtlasBlocksHeader pageTitle="bundles" />}
           sortOptions={sortOptions}
           fetchData={API.getAtlases}
           initSortTerm={'totalBundles'}
